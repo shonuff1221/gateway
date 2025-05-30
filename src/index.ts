@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
+import dotenv from 'dotenv';
 import { run } from '@oclif/core';
+
+// Load environment variables from .env file
+dotenv.config();
 
 import { startGateway } from './app';
 

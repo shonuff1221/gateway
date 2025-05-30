@@ -20,7 +20,6 @@ import { Solana } from '../solana';
 const LAMPORT_TO_SOL = 1 / Math.pow(10, 9);
 
 export async function getSolanaBalances(
-  fastify: FastifyInstance,
   network: string,
   address: string,
   tokens?: string[],
@@ -34,9 +33,9 @@ export async function getSolanaBalances(
     return { balances };
   } catch (error) {
     logger.error(`Error getting balances: ${error.message}`);
-    throw fastify.httpErrors.internalServerError(
-      `Failed to load wallet: ${error.message}`,
-    );
+    // Handle case where httpErrors is not available
+    const errorMessage = `Failed to load wallet: ${error.message}`;
+    throw new Error(errorMessage);
   }
 }
 
@@ -397,7 +396,7 @@ export const balancesRoute: FastifyPluginAsync = async (fastify) => {
     },
     async (request) => {
       const { network, address, tokens } = request.body;
-      return await getSolanaBalances(fastify, network, address, tokens);
+      return await getSolanaBalances(network, address, tokens);
     },
   );
 };

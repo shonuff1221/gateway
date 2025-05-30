@@ -1,0 +1,37 @@
+{
+  "name": "gateway",
+  "type": "docker",
+  "port": 15888,
+  "env": {
+    "GATEWAY_PASSPHRASE": {
+      "type": "secret",
+      "description": "Gateway passphrase for encryption"
+    },
+    "DEV": {
+      "value": "false",
+      "description": "Development mode"
+    }
+  },
+  "volumes": [
+    {
+      "host": "/home/gateway/conf",
+      "container": "/home/gateway/conf"
+    },
+    {
+      "host": "/home/gateway/logs",
+      "container": "/home/gateway/logs"
+    },
+    {
+      "host": "/home/gateway/db",
+      "container": "/home/gateway/db"
+    },
+    {
+      "host": "/home/gateway/certs",
+      "container": "/home/gateway/certs"
+    }
+  ],
+  "healthCheck": {
+    "path": "/",
+    "port": 15888
+  }
+}

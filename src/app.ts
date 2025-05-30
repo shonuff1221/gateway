@@ -5,6 +5,7 @@ import { promisify } from 'util';
 
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import fastifySensible from '@fastify/sensible';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { Type } from '@sinclair/typebox';
 import Fastify, { FastifyInstance } from 'fastify';
@@ -150,6 +151,9 @@ const configureGatewayServer = () => {
 
   // Register Swagger
   server.register(fastifySwagger, swaggerOptions);
+
+  // Register Sensible for better error handling
+  server.register(fastifySensible);
 
   // Register Swagger UI based on configuration
   if (!docsPort) {
