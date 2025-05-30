@@ -4,6 +4,11 @@ import { ConfigManagerCertPassphrase } from './services/config-manager-cert-pass
 import { ConfigManagerV2 } from './services/config-manager-v2';
 
 export const getHttpsOptions = () => {
+  // Skip HTTPS when running on Coolify or in dev mode
+  if (process.env.COOLIFY === 'true' || process.env.DEV === 'true') {
+    return undefined;
+  }
+
   const certPath = addSlashToPath(
     ConfigManagerV2.getInstance().get('server.certificatePath'),
   );

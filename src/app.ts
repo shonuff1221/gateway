@@ -136,7 +136,7 @@ const configureGatewayServer = () => {
           },
         }
       : false,
-    https: devMode ? undefined : getHttpsOptions(),
+    https: (process.env.COOLIFY === 'true' || process.env.DEV === 'true') ? undefined : getHttpsOptions(),
   });
 
   const docsPort = ConfigManagerV2.getInstance().get('server.docsPort');
