@@ -40,6 +40,11 @@ RUN pnpm install --frozen-lockfile
 # Copy the rest of the files
 COPY . .
 
+# Set up configuration files
+RUN cp src/templates/*.yml conf/ && \
+    mkdir -p conf/lists && \
+    cp src/templates/lists/*.json conf/lists/ || true
+
 # Build
 RUN pnpm build
 
