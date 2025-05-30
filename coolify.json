@@ -7,6 +7,10 @@
       "type": "secret",
       "description": "Gateway passphrase for encryption"
     },
+    "COOLIFY": {
+      "value": "true",
+      "description": "Enable Coolify mode (uses HTTP instead of HTTPS)"
+    },
     "DEV": {
       "value": "false",
       "description": "Development mode"
@@ -24,10 +28,6 @@
     {
       "host": "/home/gateway/db",
       "container": "/home/gateway/db"
-    },
-    {
-      "host": "/home/gateway/certs",
-      "container": "/home/gateway/certs"
     }
   ],
   "healthCheck": {
