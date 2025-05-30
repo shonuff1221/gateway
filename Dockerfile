@@ -47,4 +47,4 @@ RUN pnpm build
 EXPOSE 15888
 
 # Set the default command to run when starting the container
-CMD ["sh", "-c", "if [ \"$COOLIFY\" = \"true\" ] || [ \"$DEV\" = \"true\" ]; then pnpm start --dev; else pnpm start; fi"]
+CMD ["sh", "-c", "if [ \"$DEV\" = \"true\" ]; then pnpm start --dev; else pnpm start; fi"]
