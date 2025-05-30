@@ -53,7 +53,10 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: `http://localhost:${ConfigManagerV2.getInstance().get('server.port')}`,
+        url: process.env.COOLIFY === 'true'
+          ? 'https://gateway.app.ejm.services'
+          : `http://localhost:${ConfigManagerV2.getInstance().get('server.port')}`,
+        description: process.env.COOLIFY === 'true' ? 'Production Server' : 'Local Development Server',
       },
     ],
     tags: [
