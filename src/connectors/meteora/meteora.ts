@@ -103,21 +103,35 @@ export class Meteora {
         account: LbPair;
       }[];
 
+      logger.info(`Total pools found before filtering: ${lbPairs.length}`);
+      
       // Only apply token filtering if tokens are provided
       if (tokenMintA && tokenMintB) {
+        logger.info(`Filtering for both tokens: ${tokenMintA} and ${tokenMintB}`);
         lbPairs = lbPairs.filter((pair) => {
           const tokenXMint = pair.account.tokenXMint.toBase58();
           const tokenYMint = pair.account.tokenYMint.toBase58();
-          return (
+          logger.info(`Checking pool ${pair.publicKey.toString()} - tokenX: ${tokenXMint}, tokenY: ${tokenYMint}`);
+          const match = (
             (tokenXMint === tokenMintA && tokenYMint === tokenMintB) ||
             (tokenXMint === tokenMintB && tokenYMint === tokenMintA)
           );
+          if (match) {
+            logger.info(`Found matching pool: ${pair.publicKey.toString()}`);
+          }
+          return match;
         });
       } else if (tokenMintA) {
+        logger.info(`Filtering for single token: ${tokenMintA}`);
         lbPairs = lbPairs.filter((pair) => {
           const tokenXMint = pair.account.tokenXMint.toBase58();
           const tokenYMint = pair.account.tokenYMint.toBase58();
-          return tokenXMint === tokenMintA || tokenYMint === tokenMintA;
+          logger.info(`Checking pool ${pair.publicKey.toString()} - tokenX: ${tokenXMint}, tokenY: ${tokenYMint}`);
+          const match = tokenXMint === tokenMintA || tokenYMint === tokenMintA;
+          if (match) {
+            logger.info(`Found matching pool: ${pair.publicKey.toString()}`);
+          }
+          return match;
         });
       }
 

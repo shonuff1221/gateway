@@ -25,8 +25,8 @@ export const fetchPoolsRoute: FastifyPluginAsync = async (fastify) => {
         properties: {
           network: { type: 'string', default: 'mainnet-beta' },
           limit: { type: 'number', minimum: 1, default: 10 },
-          tokenA: { type: 'string', examples: ['SOL'] },
-          tokenB: { type: 'string', examples: ['USDC'] },
+          tokenA: { type: 'string', examples: ['So11111111111111111111111111111111111111112'] },
+          tokenB: { type: 'string', examples: ['EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'] },
         },
       },
       response: {
@@ -37,33 +37,23 @@ export const fetchPoolsRoute: FastifyPluginAsync = async (fastify) => {
       try {
         const { limit, tokenA, tokenB } = request.query;
         const network = request.query.network || 'mainnet-beta';
+        logger.info(`Fetching pools for tokenA: ${tokenA}, tokenB: ${tokenB}, network: ${network}`);
 
         const meteora = await Meteora.getInstance(network);
         const solana = await Solana.getInstance(network);
 
-        let tokenMintA, tokenMintB;
+        const tokenMintA = tokenA;
+        const tokenMintB = tokenB;
+        
+        logger.info(`Using token mint addresses directly - tokenMintA: ${tokenMintA}, tokenMintB: ${tokenMintB}`);
 
-        if (tokenA) {
-          const tokenInfoA = await solana.getToken(tokenA);
-          if (!tokenInfoA) {
-            throw fastify.httpErrors.notFound(`Token ${tokenA} not found`);
-          }
-          tokenMintA = tokenInfoA.address;
-        }
-
-        if (tokenB) {
-          const tokenInfoB = await solana.getToken(tokenB);
-          if (!tokenInfoB) {
-            throw fastify.httpErrors.notFound(`Token ${tokenB} not found`);
-          }
-          tokenMintB = tokenInfoB.address;
-        }
-
+        logger.info(`Calling meteora.getPools with limit: ${limit}, tokenMintA: ${tokenMintA}, tokenMintB: ${tokenMintB}`);
         const pairs = await meteora.getPools(limit, tokenMintA, tokenMintB);
         if (!Array.isArray(pairs)) {
-          logger.error('No matching Meteora pools found');
+          logger.error('No matching Meteora pools found - pairs is not an array');
           return [];
         }
+        logger.info(`Found ${pairs.length} pairs before filtering`);
 
         const poolInfos = await Promise.all(
           pairs
